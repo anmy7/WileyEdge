@@ -1,0 +1,5 @@
+package scalaProject
+
+class Account {
+
+}
