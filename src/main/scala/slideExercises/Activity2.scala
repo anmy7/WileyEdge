@@ -1,3 +1,5 @@
+package slideExercises
+
 object Activity2 extends App {
   println("Enter your name: ")
   var name = scala.io.StdIn.readLine()
