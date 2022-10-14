@@ -4,12 +4,20 @@ import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks._
 
 class Bank (name:String, swiftcode:String){
-  var bankName = name
-  var swiftCode = swiftcode
+  var bankName:String = name
+  var swiftCode:String = swiftcode
   var customers:ListBuffer[Customer] = ListBuffer()
+  var accounts:ListBuffer[Customer] = ListBuffer()
+  var transactions:List[Map[String, Any]] = List()
+
 
   def addCustomer(customer:Customer): Unit ={
     customers += customer
+  }
+
+  def createCustomer(firstname:String, middlename:String="", lastname:String, birthdate:String, phonenumber:String, address:String): Customer ={
+    var customer = new Customer(this, firstname, middlename, lastname, birthdate, phonenumber, address)
+    customer
   }
 
   def deleteCustomer(customer: Customer): Unit = {
@@ -63,15 +71,4 @@ class Bank (name:String, swiftcode:String){
     println(output)
     output
   }
-}
-
-object Bank extends App(){
-  var santander = new Bank("Santander Bank", "SWEDREF")
-  var nico = new Customer(1,"Nicolas", "Andres", "Mesa Yip", "16/04/2000", "07776228621", "6 Oaten Hill")
-  var p = new Customer(2,"Nicolassss", "Andres", "Mesa Yip", "16/04/2000", "07776228621", "6 Oaten Hill")
-  santander.addCustomer(nico)
-  santander.addCustomer(p)
-  println(santander.getAllCustomersToString)
-  println(santander.getInformationOfCustomer(santander.getCustomerByName("Nicolas Andres Mesa Yip")))
-  santander.getBankInformation
 }
