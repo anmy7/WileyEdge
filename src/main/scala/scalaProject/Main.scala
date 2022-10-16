@@ -2,25 +2,17 @@ package scalaProject
 
 object Main extends App{
   var santander = new Bank("Santander Bank", "SWEDREF")
-  var nico = new Customer(santander, "Nicolas", "Andres", "Mesa Yip", "16/04/2000", "07776228621", "6 Oaten Hill")
-  var p = santander.createCustomer("Nicolassss", "Andres", "Mesa Yip", "16/04/2000", "07776228621", "6 Oaten Hill")
+  var nico = santander.createCustomer( "Nicolas", "Andres", "Mesa Yip", "16/04/2000", "07776228621", "6 Oaten Hill")
+  var p = santander.createCustomer("Nicolassss", "Andres", "Mesa Yip", "16/04/2000", "07776228622", "6 Oaten Hill")
+  var account = nico.createAccount("Savings", 500)
+  var account3 = nico.createAccount("Savings2", 1500)
+  var account2 = p.createAccount("Savings", 1000)
 
-  println(santander.getAllCustomersToString)
-  nico.setDigitalSignature(222222)
-  p.setDigitalSignature(333333)
-  //  println(santander.getAllCustomersToString)
-    println(santander.getInformationOfCustomer(santander.getCustomerByName("Nicolas Andres Mesa Yip")))
-  //  santander.getBankInformation
-  var account = new Account(0, nico, santander, "Savings", 500, "Active")
-  var account2 = new Account(1, p, santander, "Savings", 1000, "Active")
-
-  account.doTransaction(account2, 25, "Test", 222222)
-  account2.doTransaction(account, 30, "Test2", 333333)
-  account.doTransaction(account2, 50, "Test3", 222222)
-
-  //  println(account.checkBalance)
-  //  println(account2.checkBalance)
-  println(santander.transactions)
-  println(account.getTransactionByID(3))
-
+  account.enableTransactionsThroughPhoneNumber
+  account2.enableTransactionsThroughPhoneNumber
+  nico.setDigitalSignature(111111)
+  account.doTransactionByPhoneNumber("07776228622", 30, "test", 111111)
+  println(account2.transactions)
+//  account.displayTransaction(account.getTransactionByID(0))
+  println(account2.checkBalance)
 }

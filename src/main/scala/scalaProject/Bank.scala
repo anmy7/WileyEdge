@@ -7,7 +7,7 @@ class Bank (name:String, swiftcode:String){
   var bankName:String = name
   var swiftCode:String = swiftcode
   var customers:ListBuffer[Customer] = ListBuffer()
-  var accounts:ListBuffer[Customer] = ListBuffer()
+  var accounts:ListBuffer[Account] = ListBuffer()
   var transactions:List[Map[String, Any]] = List()
 
 
@@ -22,6 +22,9 @@ class Bank (name:String, swiftcode:String){
 
   def deleteCustomer(customer: Customer): Unit = {
     customers -= customer
+    getCustomerAccounts(customer).foreach((account:Account)=>{
+      accounts -= account
+    })
   }
 
   def getAllCustomers: ListBuffer[Customer] ={
@@ -44,7 +47,7 @@ class Bank (name:String, swiftcode:String){
     var output:Customer = null
     breakable {
       customers.foreach((elements: Customer) => {
-        if (elements.getPersonalInformation.head.toInt == ID) {
+        if (elements.id == ID) {
           output = elements
           break
         }
@@ -57,7 +60,7 @@ class Bank (name:String, swiftcode:String){
     var output: Customer = null
     breakable {
       customers.foreach((elements: Customer) => {
-        if (elements.getPersonalInformation(1) == fullName) {
+        if (elements.getFullName == fullName) {
           output = elements
           break
         }
@@ -66,9 +69,40 @@ class Bank (name:String, swiftcode:String){
     output
   }
 
+  def getCustomerByPhoneNumber(phoneNumber: String): Customer = {
+    var output: Customer = null
+    breakable {
+      customers.foreach((elements: Customer) => {
+        if (elements.phoneNumber == phoneNumber) {
+          output = elements
+          break
+        }
+      })
+    }
+    output
+  }
+
+  def getCustomerAccounts(customer: Customer): ListBuffer[Account] = {
+    customer.accounts
+  }
+
   def getBankInformation: String ={
     var output = s"Bank name: $bankName\nSWIFT Code: $swiftCode\nNumber of Customers: ${customers.length}"
     println(output)
+    output
+  }
+
+  def getAccountByAccNumber(accNumber:Int, sortc:Int): Account ={
+    var output:Account = null
+    breakable {
+      accounts.foreach((account: Account) => {
+        if (accNumber == account.accountNumber && sortc == account.sortCode) {
+          output = account
+          break
+        }
+        else null
+      })
+    }
     output
   }
 }

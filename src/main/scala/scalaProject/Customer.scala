@@ -1,6 +1,7 @@
 package scalaProject
 
 import java.util.Calendar
+import scala.collection.mutable.ListBuffer
 
 class Customer (Bank:Bank, firstname:String, middlename:String="", lastname:String, birthdate:String, phonenumber:String, address:String){
   var bank:Bank = Bank
@@ -12,23 +13,42 @@ class Customer (Bank:Bank, firstname:String, middlename:String="", lastname:Stri
   var phoneNumber:String = phonenumber
   var Address:String = address
   var digitalSignature: Int = 0
-//  var accounts:Account
+  var accounts:ListBuffer[Account] = ListBuffer()
+  var accountForPhoneTransactions:Account = null
 //  var loans:Loan
 
   bank.addCustomer(this)
 
+
+  def createAccount(accounttype: String, Balance:Double=0): Account ={
+    var account = new Account(this, bank, accounttype, Balance, "Active")
+    account
+  }
+
+  def deleteAccount(account:Account): Boolean ={
+    if (accounts.contains(account)) {
+      bank.accounts -= account
+      accounts -= account
+      true
+    }
+    else false
+  }
+
   def getPersonalInformation: List[String] ={
-//    println(s"Customer ID: $id")
-//    println(s"Name: $getFullName")
-//    println(s"Birth date: $birthDate")
-//    println(s"Phone Number: $phoneNumber")
-//    println(s"Address: $Address")
+    println("-"*60)
+    println(s"Customer ID: $id")
+    println(s"Name: $getFullName")
+    println(s"Birth date: $birthDate")
+    println(s"Phone Number: $phoneNumber")
+    println(s"Address: $Address")
+    println("-"*60)
     List(id.toString, getFullName, birthDate, phoneNumber, Address)
   }
 
 
   def getFinantialInformation:Unit={
-    println("Accounts: ")
+    println(accounts.foreach(_.getAccountInformation()))
+
     println("Loans: ")
   }
 
