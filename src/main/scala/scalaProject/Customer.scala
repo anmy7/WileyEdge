@@ -1,6 +1,5 @@
 package scalaProject
 
-import java.util.Calendar
 import scala.collection.mutable.ListBuffer
 
 class Customer (Bank:Bank, firstname:String, middlename:String="", lastname:String, birthdate:String, phonenumber:String, address:String){
@@ -15,7 +14,7 @@ class Customer (Bank:Bank, firstname:String, middlename:String="", lastname:Stri
   var digitalSignature: Int = 0
   var accounts:ListBuffer[Account] = ListBuffer()
   var accountForPhoneTransactions:Account = null
-//  var loans:Loan
+  var loans:ListBuffer[Loan] = ListBuffer()
 
   bank.addCustomer(this)
 
@@ -47,9 +46,10 @@ class Customer (Bank:Bank, firstname:String, middlename:String="", lastname:Stri
 
 
   def getFinantialInformation:Unit={
-    println(accounts.foreach(_.getAccountInformation()))
-
+    accounts.foreach(_.getAccountInformation())
+    println()
     println("Loans: ")
+    loans.foreach(_.displayLoanStatus())
   }
 
   def getFullName: String ={

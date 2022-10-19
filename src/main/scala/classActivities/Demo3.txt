@@ -1,0 +1,2 @@
+Hello this is an example of textfile
+Scala will open this file and read these lines of text.

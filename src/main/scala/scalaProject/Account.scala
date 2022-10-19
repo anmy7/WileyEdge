@@ -1,6 +1,7 @@
 package scalaProject
 
 import java.util.Calendar
+import scala.collection.mutable.ListBuffer
 import scala.util.Random
 import scala.util.control.Breaks._
 
@@ -17,9 +18,20 @@ class Account(Customer:Customer, Bank:Bank, accounttype: String, Balance:Double,
   customer.accounts += this
   var accountNumber:Int =0
   var sortCode:Int=0
+  var creditCards:ListBuffer[CreditCard] = ListBuffer[CreditCard]()
   generateAccountNumber()
 //  setAccountNumber(11111111, 222222)
 
+  def createCreditCard(cardtype:String, cashierLimit:Double, purchaselimit:Double, Balance:Double = 0): CreditCard ={
+    var balanceToAdd:Double = 0
+    if(cardtype == "Prepaid"){
+      if(Balance <= this.checkBalance){
+        balanceToAdd = Balance
+      } else balanceToAdd = 0
+    } else balanceToAdd = 0
+    var card:CreditCard = new CreditCard(this, cardtype, cashierLimit, purchaselimit, balanceToAdd)
+    card
+  }
 
   def generateAccountNumber(): Unit ={
     if(accountNumber == 0 && sortCode == 0) {
@@ -85,7 +97,6 @@ class Account(Customer:Customer, Bank:Bank, accounttype: String, Balance:Double,
   def getAllTransactions: List[Map[String, Any]] ={
     transactions
   }
-
 
   def getTransactionByID(id:Int): Map[String, Any] ={
     var transaction:Map[String, Any] = Map()
@@ -184,5 +195,19 @@ class Account(Customer:Customer, Bank:Bank, accounttype: String, Balance:Double,
 
   def checkTransactionsThroughPhoneNumber: Boolean ={
     customer.accountForPhoneTransactions == this
+  }
+
+  def requestLoan(amount:Double, interests:Double, loantype:String, lengthLoan:Int): Loan ={
+    var loan = new Loan (this, amount, interests, loantype, lengthLoan)
+    loan.displayLoanStatus()
+    loan
+  }
+
+  def freezeCreditCard(card:CreditCard):Unit ={
+    card.status = "Frozen"
+  }
+
+  def unfreezeCreditCard(card: CreditCard): Unit = {
+    card.status = "Active"
   }
 }

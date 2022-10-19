@@ -13,6 +13,13 @@ val flatSpec="org.scalatest" %% "scalatest-flatspec" % "3.2.14" % Test
 val funSpec="org.scalatest" %% "scalatest-funspec" % "3.2.14" % Test
 val wordSpec="org.scalatest" %% "scalatest-wordspec" % "3.2.14" % Test
 
-libraryDependencies ++= Seq(scalaLogging,utilControl,scalaTest)
+val jodaTime="joda-time" % "joda-time" % "2.12.0"
+val jodaConvert="org.joda" % "joda-convert" % "2.2.2"
+val mysql = "mysql" % "mysql-connector-java" % "8.0.30"
+val dep1="org.scalikejdbc" %% "scalikejdbc" % "3.5.0"
+val dep2="com.h2database" % "h2" % "2.1.214" % Test
+val dep3="ch.qos.logback" % "logback-classic" % "1.4.4" % Test
+libraryDependencies ++= Seq(scalaLogging,utilControl,scalaTest, flatSpec, funSpec, wordSpec, jodaTime, jodaConvert, mysql, dep1, dep2, dep3)
+//libraryDependencies += "mysql" % "mysql-connector-java" % "8.0.30"
 // https://mvnrepository.com/artifact/com.typesafe.scala-logging/scala-logging-slf4j
 //libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2"

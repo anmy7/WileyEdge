@@ -8,6 +8,8 @@ class Bank (name:String, swiftcode:String){
   var swiftCode:String = swiftcode
   var customers:ListBuffer[Customer] = ListBuffer()
   var accounts:ListBuffer[Account] = ListBuffer()
+  var loans:ListBuffer[Loan] = ListBuffer()
+  var creditCards:ListBuffer[CreditCard] = ListBuffer()
   var transactions:List[Map[String, Any]] = List()
 
 
@@ -104,5 +106,33 @@ class Bank (name:String, swiftcode:String){
       })
     }
     output
+  }
+
+  def changeConditionsLoan(loan:Loan, interest:Int = -1, lengthLoan:Int = -1): Unit ={
+    if(interest != -1){
+      loan.interest = interest
+    }
+    if(lengthLoan != -1){
+      loan.lengthOfLoan = lengthLoan
+    }
+  }
+  def acceptLoan(loan:Loan): Unit ={
+    loan.acceptLoan
+  }
+
+  def blockAccount(account:Account): Unit ={
+    account.status = "Blocked"
+  }
+
+  def unblockAccount(account: Account): Unit = {
+    account.status = "Active"
+  }
+
+  def blockCreditCard(card: CreditCard): Unit = {
+    card.status = "Blocked"
+  }
+
+  def unblockCreditCard(card: CreditCard): Unit = {
+    card.status = "Active"
   }
 }
