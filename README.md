@@ -17,3 +17,8 @@ The banking project has 5 main classes which are:
 - [Account](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Account.scala)
 - [CreditCard](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/CreditCard.scala)
 - [Loan](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Loan.scala)
+
+There are also some other classes which are the following:
+- [Load Data from Database](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/LoadData.scala)
+- [Tests of the Banking systems](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Test.scala)
+- [Main](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Main.scala)
