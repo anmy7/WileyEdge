@@ -29,7 +29,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
   generateChipID
   setPinNumber()
 
-
+  /*
+  Generate the credit card number, cvv and expiry date
+   */
   def generateCreditCard: Unit ={
     var unique:Boolean = true
     var cNumber: Long = 0
@@ -55,6 +57,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     }
   }
 
+  /*
+    Generate the Chip id
+   */
   def generateChipID: Unit ={
     var unique: Boolean = true
     var chipID: Long = 0
@@ -73,13 +78,18 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     }
   }
 
-
+  /*
+  Set the Pin number
+   */
   def setPinNumber(number:Int = 0): Unit ={
     if(number.toString.length==4){
       pinNumber = number
     } else pinNumber = Random.nextInt(8999) + 1000
   }
 
+  /*
+  Change the pin number
+   */
   def changePinNumber(actualPin:Int, newPin:Int, digitalSignature:Int): Unit ={
     if(customer.isDigitalSignatureSet) {
       if(customer.checkDigitalSignature(digitalSignature)) {
@@ -90,6 +100,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     }
   }
 
+  /*
+  Change the purchase and withdraw limits
+   */
   def changePurchaseOrWithdrawLimits(digitalSignature:Int, purchaselimit:Double = purchaseLimit, withdrawlimit:Double = cashierWithdrawLimit): Unit ={
     if(customer.isDigitalSignatureSet) {
       if(customer.checkDigitalSignature(digitalSignature)) {
@@ -103,6 +116,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     }else println("Please configure your digital signature.")
   }
 
+  /*
+  Increase the balance of the prepaid credit card from the account
+   */
   def increaseBalanceOfCardFromAccount(amount:Double, digitalSignature:Int): Unit ={
     if(status == "Active"){
       if(account.status == "Active") {
@@ -121,6 +137,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     } else println("The credit card is either blocked or frozen.")
   }
 
+  /*
+  Increase the balance of the prepaid credit card from the cashier
+   */
   def increaseBalanceOfCardFromCashier(amount: Double, pin: Int): Unit = {
     if (status == "Active") {
       if (account.status == "Active") {
@@ -139,6 +158,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     } else println("The credit card is either blocked or frozen.")
   }
 
+  /*
+  Pay using the credit card
+   */
   def payUsingCreditCard(destinatary:Account, amount:Double, pin:Int): Unit ={
     if (status == "Active") {
       if (account.status == "Active") {
@@ -164,6 +186,9 @@ class CreditCard (Account: Account, cardtype:String, cashierLimit:Double, purcha
     } else println("The credit card is either blocked or frozen.")
   }
 
+  /*
+  Display the credit card information
+   */
   def displayCreditCardInformation: Unit ={
     println(s"CreditCard Owner: ${customer.getFullName}")
     println(s"Card Type: $cardType")

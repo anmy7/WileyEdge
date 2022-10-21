@@ -1,2 +1,0 @@
-"Bank Of America", "WEISWE"
-"Santander Bank", "SWEDREF"

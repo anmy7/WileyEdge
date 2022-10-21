@@ -1,38 +1,144 @@
 package scalaProject
 
+import java.sql._
 import scala.collection.mutable.ListBuffer
 import scala.io.Source
 
 object Main extends App{
-
-  def readFromFile: ListBuffer[Array[String]] ={
-    var data:ListBuffer[Array[String]] = ListBuffer()
-    Source.fromFile("C:\\Users\\Nico\\IdeaProjects\\WileyEdge\\src\\main\\scala\\classActivities\\Variables.txt").getLines().foreach((element)=>{
-      var list:Array[String] = element.split(",")
-      data += list
+  val url = "jdbc:mysql://localhost:3306/banking"
+  val username = "root"
+  val password = "root"
+  def readFromFile: scala.Array[String] ={
+    var data:scala.Array[String] = scala.Array()
+    Source.fromFile("C:\\Users\\Nico\\IdeaProjects\\WileyEdge\\src\\main\\scala\\scalaProject\\Variables.txt").getLines().foreach((element)=>{
+      var list:scala.Array[String] = element.split(",")
+      data = list
     })
     data
   }
 
-  var bankData:ListBuffer[Array[String]] = readFromFile
-  var bofa = new Bank(bankData(0)(0), bankData(0)(1))
-  var santander = new Bank(bankData(1)(0), bankData(1)(1))
-  var nico = bofa.createCustomer( "Nicolas", "Andres", "Mesa Yip", "16/04/2000", "07776228621", "6 Oaten Hill")
-  var p = bofa.createCustomer("Nicolassss", "Andres", "Mesa Yip", "16/04/2000", "07776228622", "6 Oaten Hill")
-  var account = nico.createAccount("Savings", 500000)
-  var account3 = nico.createAccount("Savings2", 1500)
-  var account2 = p.createAccount("Savings", 1000)
-//  var loan = account.requestLoan(500000, 3.5, "test", 5)
-  var card= account.createCreditCard("Prepaid", 500,500,1000)
-  card.displayCreditCardInformation
-  println(card.setPinNumber(1111))
-  card.increaseBalanceOfCardFromCashier(20000, 1111)
-  nico.setDigitalSignature(111111)
-  card.changePurchaseOrWithdrawLimits(111111, 50000, 200000)
-  card.displayCreditCardInformation
-  card.payUsingCreditCard(account3, 1000, 1111)
-  account.freezeCreditCard(card)
-  card.increaseBalanceOfCardFromAccount(2000,111111)
-  card.displayCreditCardInformation
-  println(bofa.transactions)
+  def loadCustomersFromDatabase(bank:Bank): Unit ={
+    // connection instance creation
+    var connection: Connection = null
+    try {
+      Class.forName("com.mysql.jdbc.Driver")
+      connection = DriverManager.getConnection(url, username, password)
+      val statement = connection.createStatement()
+      val resultSet = statement.executeQuery("select firstName,middleName, lastName, birthDate, phoneNumber, address from banking.customers; ")
+      while (resultSet.next()) {
+        val firstName = resultSet.getString("firstName")
+        val middleName = resultSet.getString("middleName")
+        val lastName = resultSet.getString("lastName")
+        val birthDate = resultSet.getString("birthDate")
+        val phoneNumber = resultSet.getString("phoneNumber")
+        val address = resultSet.getString("address")
+        new Customer(bank, firstName, middleName, lastName, birthDate, phoneNumber, address)
+      }
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    finally {
+      connection.close()
+    }
+  }
+
+  def loadAccountsFromDatabase(): Unit = {
+    // connection instance creation
+    var connection: Connection = null
+    try {
+      Class.forName("com.mysql.jdbc.Driver")
+      connection = DriverManager.getConnection(url, username, password)
+      val statement = connection.createStatement()
+      val resultSet = statement.executeQuery("select customerID,accountNumber,sortCode, accountType, balance, status from banking.accounts; ")
+      while (resultSet.next()) {
+        val customerID = resultSet.getInt("customerID")
+        val accountNumber = resultSet.getInt("accountNumber")
+        val sortCode = resultSet.getInt("sortCode")
+        val accountType = resultSet.getString("accountType")
+        val balance = resultSet.getDouble("balance")
+        val status = resultSet.getString("status")
+        val customer = new Account(bofa.getCustomerByID(customerID), bofa, accountType, balance, status)
+        customer.accountNumber = accountNumber
+        customer.sortCode = sortCode
+      }
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    finally {
+      connection.close()
+    }
+  }
+
+  def loadLoansFromDatabase(): Unit = {
+    // connection instance creation
+    var connection: Connection = null
+    try {
+      Class.forName("com.mysql.jdbc.Driver")
+      connection = DriverManager.getConnection(url, username, password)
+      val statement = connection.createStatement()
+      val resultSet = statement.executeQuery("select accountID,amount,interests, loanType, length, status from banking.loans; ")
+      while (resultSet.next()) {
+        val accountID = resultSet.getInt("accountID")
+        val amount = resultSet.getDouble("amount")
+        val interests = resultSet.getDouble("interests")
+        val loanType = resultSet.getString("loanType")
+        val length = resultSet.getInt("length")
+        val status = resultSet.getString("status")
+        val loan = new Loan(bofa.accounts(accountID), amount, interests, loanType, length)
+        loan.status = status
+      }
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    finally {
+      connection.close()
+    }
+  }
+
+  def loadCreditCardsFromDatabase(): Unit = {
+    // connection instance creation
+    var connection: Connection = null
+    try {
+      Class.forName("com.mysql.jdbc.Driver")
+      connection = DriverManager.getConnection(url, username, password)
+      val statement = connection.createStatement()
+      val resultSet = statement.executeQuery("select accountID,status, cardNumber, expiryDate, cvv, cardType, pinNumber, cashierLimit, purchaseLimit, balance from banking.creditcards; ")
+      while (resultSet.next()) {
+        val accountID = resultSet.getInt("accountID")
+        val status = resultSet.getString("status")
+        val cardNumber = resultSet.getString("cardNumber")
+        val expiryDate = resultSet.getString("expiryDate")
+        val cvv = resultSet.getString("cvv")
+        val cardType = resultSet.getString("cardType")
+        val pinNumber = resultSet.getInt("pinNumber")
+        val cashierLimit = resultSet.getDouble("cashierLimit")
+        val purchaseLimit = resultSet.getDouble("purchaseLimit")
+        val balance = resultSet.getDouble("balance")
+        val card = new CreditCard(bofa.accounts(accountID), cardType, cashierLimit, purchaseLimit, balance)
+        card.status = status
+        card.cardNumber = cardNumber
+        card.expiryDate = expiryDate
+        card.CVV = cvv
+        card.pinNumber = pinNumber
+      }
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    finally {
+      connection.close()
+    }
+  }
+
+
+  var bankData:scala.Array[String] = readFromFile
+  var bofa = new Bank(bankData(0), bankData(1))
+  loadCustomersFromDatabase(bofa)
+  loadAccountsFromDatabase()
+  loadLoansFromDatabase()
+  loadCreditCardsFromDatabase()
+  var nico = bofa.customers(0)
+  var p = bofa.customers(1)
+//  var card= p.accounts(0).createCreditCard("Basic", 500,500,1000)
+  println(bofa.creditCards)
+
 }

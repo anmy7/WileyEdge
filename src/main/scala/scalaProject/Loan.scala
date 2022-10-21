@@ -24,6 +24,9 @@ class Loan (Account:Account, amount:Double, interests:Double, loantype:String, l
   var dateEndLoan:String =""
   var dateLastPayment:String = ""
 
+  /*
+  Display the Loan status
+   */
   def displayLoanStatus(): Unit = {
     println("-" * 40)
     println(s"Loan ID: $id")
@@ -48,19 +51,30 @@ class Loan (Account:Account, amount:Double, interests:Double, loantype:String, l
     }
   }
 
+  /*
+  Get the amount debt
+   */
   def getAmountDebt: Double ={
     amountToPay-amountAlreadyPayed
   }
 
+  /*
+  Check if the loan was approved
+   */
   def isLoanApproved: Boolean ={
     status == "Approved"
   }
 
+  /*
+  Check if the loan was payed.
+   */
   def checkIfLoanIsPayed: Boolean ={
     amountToPay == amountAlreadyPayed
   }
 
-
+  /*
+  Pay certain amount of the loan
+   */
   def payLoan(amount:Double, digitalSignature:Int): Unit ={
     if(account.status == "Active") {
       if(status == "Approved") {
@@ -89,12 +103,18 @@ class Loan (Account:Account, amount:Double, interests:Double, loantype:String, l
     }
   }
 
+  /*
+  Calculate the length of the loan
+   */
   def calculateLengthOfLoan: String ={
     val now:Calendar = Calendar.getInstance()
     now.add(Calendar.YEAR, lengthOfLoan)
     format.format(now.getTime)
   }
 
+  /*
+  Updating the status when the bank accepts the loan
+   */
   def acceptLoan: Unit ={
     if(status == "Requested"){
       status = "Approved"
@@ -104,6 +124,9 @@ class Loan (Account:Account, amount:Double, interests:Double, loantype:String, l
     }
   }
 
+  /*
+  Display the debt information.
+   */
   def displayDebtInformation: Unit ={
     println("-"*40)
     println(s"Loan ID: $id")
