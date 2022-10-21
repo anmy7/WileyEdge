@@ -22,3 +22,12 @@ There are also some other classes which are the following:
 - [Load Data from Database](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/LoadData.scala)
 - [Tests of the Banking systems](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Test.scala)
 - [Main](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Main.scala)
+
+
+## Improvements
+There are a couple of improvements that can be approached. These are:
+- Modifying the balance when transactions are performed.
+- Save the digital signature in the database.
+- A database table which stores the transactions.
+- Send money to International accounts through IBAN and SWIFT.
+- Private banking login (mobile phone login)
