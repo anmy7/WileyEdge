@@ -9,3 +9,11 @@ There are three main sections in the repository.
 
 Moreover, there is another section which is part of the Class exercises and contains different Unit tests.
 - [Tests](https://github.com/anmy7/WileyEdge/tree/master/src/test/scala)
+
+# Banking Project
+The banking project has 5 main classes which are:
+- [Bank](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Bank.scala)
+- [Customer](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Customer.scala)
+- [Account](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Account.scala)
+- [CreditCard](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/CreditCard.scala)
+- [Loan](https://github.com/anmy7/WileyEdge/blob/master/src/main/scala/com/training/scalaProject/Loan.scala)
