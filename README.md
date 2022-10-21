@@ -26,7 +26,7 @@ There are also some other classes which are the following:
 
 ## Improvements
 There are a couple of improvements that can be approached. These are:
-- Modifying the balance when transactions are performed.
+- Modifying the balance in the database when transactions are performed.
 - Save the digital signature in the database.
 - A database table which stores the transactions.
 - Send money to International accounts through IBAN and SWIFT.
