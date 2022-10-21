@@ -58,13 +58,40 @@ class Bank (name:String, swiftcode:String){
     }
   }
 
+  def deleteFromDatabase(table:String, parameter:String, id:Int): Unit ={
+    val url = "jdbc:mysql://localhost:3306/banking"
+    val username = "root"
+    val password = "root"
+    // connection instance creation
+    var connection: Connection = null
+    try {
+      Class.forName("com.mysql.jdbc.Driver")
+      connection = DriverManager.getConnection(url, username, password)
+      val insertMySQL = "DELETE FROM "+table+" WHERE "+parameter+"= ?;"
+      val preparedStatement: PreparedStatement = connection.prepareStatement(insertMySQL)
+      preparedStatement.setInt(1, id)
+
+      preparedStatement.execute()
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
+    finally {
+      connection.close()
+    }
+  }
+
   /*
     Delete customer, accounts and credit cards
   */
   def deleteCustomer(customer: Customer): Unit = {
     customers -= customer
+    deleteFromDatabase("customers", "id", customer.id)
+    deleteFromDatabase("accounts", "customerID", customer.id)
+    deleteFromDatabase("creditcards", "customerID", customer.id)
+    deleteFromDatabase("loans", "customerID", customer.id)
     getCustomerAccounts(customer).foreach((account:Account)=>{
       accounts -= account
+
       account.creditCards.foreach((cards)=>{
         creditCards -= cards
       })
